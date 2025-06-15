@@ -1,4 +1,4 @@
- Secure Coding Review
+## Secure Coding Review
 
 ## 📌 Overview
 
@@ -119,19 +119,14 @@ Check that no critical or high severity issues remain.
 
 ---
 
-## 📚 Learning Outcomes
 
-- Understanding of secure coding principles
-- Ability to detect common vulnerabilities
-- Experience using static code analysis tools
-- Practice writing secure, clean Python code
 
 ---
 
 ## 👤 Author
 
-**Your Name**  
-[Your Email] • [GitHub](https://github.com/yourusername)
+# phoric_zen  
+
 
 ---
 
