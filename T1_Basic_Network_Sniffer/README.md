@@ -1,50 +1,25 @@
-import socket
-import struct
+# 🕵️ Basic Packet Sniffer in Python
 
-def ethernet_frame(data):
-    dest_mac, src_mac, proto = struct.unpack('!6s6sH', data[:14])
-    return get_mac_addr(dest_mac), get_mac_addr(src_mac), socket.htons(proto), data[14:]
+This project is a lightweight network packet sniffer written in Python. It captures raw network traffic at the Ethernet level and parses the data to reveal useful information about each packet.
 
-def get_mac_addr(bytes_addr):
-    return ':'.join(f'{b:02x}' for b in bytes_addr)
+## 🚀 Features
 
-def ipv4_packet(data):
-    version_header_len = data[0]
-    header_len = (version_header_len & 15) * 4
-    ttl, proto, src, target = struct.unpack('!8xBB2x4s4s', data[:20])
-    return {
-        'version': version_header_len >> 4,
-        'header_length': header_len,
-        'ttl': ttl,
-        'protocol': proto,
-        'src_ip': ipv4(src),
-        'dst_ip': ipv4(target),
-        'data': data[header_len:]
-    }
+- Captures live packets directly from the network interface
+- Extracts and displays:
+  - Ethernet header details (source and destination MAC addresses)
+  - Protocol type (IPv4 detection)
+  - IPv4 header details: version, header length, source IP, destination IP, TTL, protocol type
 
-def ipv4(addr):
-    return '.'.join(map(str, addr))
+## 🛠️ Requirements
 
-def main():
-    # Create a raw socket and bind it to the public interface
-    conn = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(3))
+- Python 3.x
+- Linux or macOS (uses raw sockets via `AF_PACKET`)
+- Root/Administrator privileges
 
-    print("[*] Sniffing started... Press CTRL+C to stop.")
+## 📦 How to Run
 
-    try:
-        while True:
-            raw_data, addr = conn.recvfrom(65535)
-            dest_mac, src_mac, eth_proto, data = ethernet_frame(raw_data)
-            print('\nEthernet Frame:')
-            print(f'  - Destination: {dest_mac}, Source: {src_mac}, Protocol: {eth_proto}')
+### 1. Clone or download the project
 
-            if eth_proto == 8:  # IPv4
-                ipv4_data = ipv4_packet(data)
-                print('IPv4 Packet:')
-                print(f"  - Source: {ipv4_data['src_ip']}, Target: {ipv4_data['dst_ip']}, Protocol: {ipv4_data['protocol']}")
-    except KeyboardInterrupt:
-        print("\n[*] Sniffing stopped.")
-
-if __name__ == '__main__':
-    main()
-
+```bash
+git clone https://github.com/yourusername/basic-sniffer.git
+cd basic-sniffer
